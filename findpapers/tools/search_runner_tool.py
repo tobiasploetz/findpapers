@@ -317,9 +317,7 @@ def _flag_potentially_predatory_publications(search: Search):
         A search instance
     """
 
-    for i, paper in enumerate(search.papers):
-        logging.info(f"({i+1}/{len(search.papers)}) Checking paper: {paper.title}")
-
+    def _do_work(paper: Paper):
         try:
             if paper.publication is not None:
                 publication_name = paper.publication.title.lower()
@@ -352,6 +350,13 @@ def _flag_potentially_predatory_publications(search: Search):
                     paper.publication.is_potentially_predatory = True
 
         except Exception:
+            pass
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+        futures = []
+        for paper in search.papers:
+            futures.append(executor.submit(_do_work, paper))
+        for future in concurrent.futures.as_completed(futures):
             pass
 
 
