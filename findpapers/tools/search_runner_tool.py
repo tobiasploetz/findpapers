@@ -513,6 +513,10 @@ def search(
     scopus_api_token: Optional[str] = None,
     ieee_api_token: Optional[str] = None,
     proxy: Optional[str] = None,
+    enrich: Optional[bool] = True,
+    filter: Optional[bool] = True,
+    merge_duplicates: Optional[bool] = True,
+    flag_potentially_predatory: Optional[bool] = True,
     verbose: Optional[bool] = False,
 ):
     """
@@ -669,21 +673,21 @@ def search(
             biorxiv_searcher.DATABASE_LABEL,
         )
 
-    logging.info("Enriching results...")
+    if enrich:
+        logging.info("Enriching results...")
+        _enrich(search, scopus_api_token)
 
-    _enrich(search, scopus_api_token)
+    if filter:
+        logging.info("Filtering results...")
+        _filter(search)
 
-    logging.info("Filtering results...")
+    if merge_duplicates:
+        logging.info("Finding and merging duplications...")
+        search.merge_duplications()
 
-    _filter(search)
-
-    logging.info("Finding and merging duplications...")
-
-    search.merge_duplications()
-
-    logging.info("Flagging potentially predatory publications...")
-
-    _flag_potentially_predatory_publications(search)
+    if flag_potentially_predatory:
+        logging.info("Flagging potentially predatory publications...")
+        _flag_potentially_predatory_publications(search)
 
     logging.info(
         f"It's finally over! {len(search.papers)} papers retrieved. Good luck with your research :)"
