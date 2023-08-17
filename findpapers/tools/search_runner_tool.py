@@ -519,7 +519,7 @@ def search(
     merge_duplicates: Optional[bool] = True,
     flag_potentially_predatory: Optional[bool] = True,
     verbose: Optional[bool] = False,
-):
+) -> Search:
     """
     When you have a query and needs to get papers using it, this is the method that you'll need to call.
     This method will find papers from some databases based on the provided query.
@@ -695,3 +695,4 @@ def search(
     )
 
     persistence_util.save(search, outputpath)
+    return search

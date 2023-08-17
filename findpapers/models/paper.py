@@ -94,6 +94,8 @@ class Paper:
         self.categories = categories
         self.file_path = file_path
         self.pdf_url = pdf_url
+        if doi is not None:
+            self.urls.add(f"http://doi.org/{doi}")
 
     def add_database(self, database_name: str):
         """
