@@ -40,6 +40,7 @@ def _get_paper_metadata_by_url(url: str):
         A paper metadata dict (or None if the paper metadata cannot be found)
     """
 
+    print("Getting metadata for paper: " + url)
     response = common_util.try_success(
         lambda url=url: requests.get(url, allow_redirects=True), 2, 2
     )
@@ -115,7 +116,7 @@ def _enrich(search: Search, scopus_api_token: Optional[str] = None):
         try:
             urls = set()
             if paper.doi is not None:
-                urls.add(f"http://doi.org/{paper.doi}")
+                urls.add(f"https://doi.org/{paper.doi}")
             else:
                 urls = copy.copy(paper.urls)
 

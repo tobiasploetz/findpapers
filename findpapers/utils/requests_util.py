@@ -122,6 +122,7 @@ class DefaultSession(requests.Session, metaclass=common_util.ThreadSafeSingleton
         """
 
         kwargs['timeout'] = kwargs.get('timeout', self.default_timeout)
+        print(f"Requesting {url}")
 
         try:
             response = super().request(method, url, **kwargs)
