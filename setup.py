@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="Findpapers",
-    version="0.6.7",
+    version="0.6.10",
     description="Findpapers is an application that helps researchers who are looking for references for their work.",
     author="Jonatas Grosman",
     author_email="jonatasgrosman@gmail.com",
