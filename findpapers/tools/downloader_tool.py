@@ -29,7 +29,7 @@ def find_pdf_url(paper: Paper) -> Optional[str]:
             logging.info(f"Fetching data from: {url}")
 
             response = common_util.try_success(
-                lambda url=url: DefaultSession().get(url), 2
+                lambda url=url: DefaultSession().head(url, allow_redirects=True), 2
             )
 
             if response is None:
@@ -138,6 +138,9 @@ def find_pdf_url(paper: Paper) -> Optional[str]:
 
                 elif host_url in ["https://asmp-eurasipjournals.springeropen.com"]:
                     pdf_url = response.url.replace("/articles/", "/track/pdf/")
+
+            elif "application/pdf" in response.headers.get("content-type").lower():
+                pdf_url = response.url
 
         except Exception as e:  # pragma: no cover
             logging.debug(e, exc_info=True)
